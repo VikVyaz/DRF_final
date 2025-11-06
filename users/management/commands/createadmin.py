@@ -9,6 +9,7 @@ class Command(BaseCommand):
         user = U.objects.create(
             email=config("ADMIN_EMAIL"),
             username=config("ADMIN_USERNAME"),
+            telegram_chat_id=config("ADMIN_CHAT_ID")
         )
 
         user.set_password(config("ADMIN_PASSWORD"))

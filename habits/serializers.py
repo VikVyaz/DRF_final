@@ -22,10 +22,11 @@ class UsefulHabitSerializer(serializers.ModelSerializer):
                 "Либо Вознаграждение, либо Связанная привычка"
             )
 
-        if not attrs.related_habit.is_pleasant:
-            raise serializers.ValidationError(
-                "Связанной привычкой может быть только Приятная привычка"
-            )
+        if attrs.get('related_habit', False):
+            if not attrs.related_habit.is_pleasant:
+                raise serializers.ValidationError(
+                    "Связанной привычкой может быть только Приятная привычка"
+                )
 
         return attrs
 

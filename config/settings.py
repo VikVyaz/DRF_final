@@ -1,7 +1,6 @@
 from datetime import timedelta
 from pathlib import Path
 
-from celery.schedules import crontab
 from corsheaders.defaults import default_headers
 from decouple import config
 
@@ -33,12 +32,12 @@ INSTALLED_APPS = [
     "users",
 ]
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-#     ),
-#     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-# }
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
 
 if DEBUG:
     SIMPLE_JWT = {
@@ -166,10 +165,10 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Celery-beat
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'check_activity': {
-#         'task': 'materials.tasks.user_is_active_daily_check',
-#         'schedule': crontab(hour=0, minute=0),
-#     },
-# }
+
+CELERY_BEAT_SCHEDULE = {
+    'check_habits': {
+        'task': 'habits.tasks.one_hour_notification',
+        'schedule': timedelta(seconds=4),
+    },
+}
