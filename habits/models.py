@@ -12,7 +12,7 @@ class BaseHabit(models.Model):
         (False, "Личное пользование")
     ]
 
-    name = models.CharField(max_length=20, blank=True, null=True, help_text='Название привычки')
+    name = models.CharField(max_length=20, help_text='Название привычки')
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE, help_text='Создатель привычки')
     location = models.CharField(help_text="Место, в котором необходимо выполнять привычку")
     scheduled_time = models.DateTimeField(help_text='Время, когда необходимо выполнять привычку')
