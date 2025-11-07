@@ -1,16 +1,9 @@
-from datetime import timedelta
-
 from django.core.validators import MaxValueValidator
 from django.db import models
 
 
 class BaseHabit(models.Model):
     """Абстрактная модель для привычек"""
-
-    PUBLIC_CHOICE = [
-        (True, "Общий доступ"),
-        (False, "Личное пользование")
-    ]
 
     name = models.CharField(max_length=20, help_text='Название привычки')
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE, help_text='Создатель привычки')
@@ -21,7 +14,7 @@ class BaseHabit(models.Model):
     duration = models.PositiveIntegerField(
         validators=[MaxValueValidator(120)],
         help_text='Время, которое потратит пользователь на выполнение привычки в секундах(максимум 120 сек)')
-    is_public = models.BooleanField(choices=PUBLIC_CHOICE, help_text='Общий доступ для привычки')
+    is_public = models.BooleanField(default=True, help_text='Общий доступ для привычки')
 
     class Meta:
         abstract = True
