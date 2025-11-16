@@ -92,7 +92,10 @@ jobs:
           "mkdir -p ~/DRF-final"
 
       - name: Copy .env to server
-        run: echo "${{ secrets.ENV_FILE }}" | ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env"
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DjangoProject/.env" <<EOF
+          ${{ secrets.ENV_FILE }}
+          EOF
 
       - name: Deploy code & run migrations
         run: |
