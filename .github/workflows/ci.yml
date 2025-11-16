@@ -91,11 +91,11 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
           "rm -rf ~/DRF-final && mkdir -p ~/DRF-final"
 
-      - name: Deploy .env to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<EOF
-          ${{ secrets.ENV_FILE }}
-          EOF
+      - name: Create temp .env
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Copy .env to server
+        run: scp -o StrictHostKeyChecking=no .env ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/DRF-final/.env
 
       - name: Deploy to Server
         run: |
