@@ -1,6 +1,6 @@
 name: Django CI
 
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   lint:
@@ -93,7 +93,7 @@ jobs:
 
       - name: Copy .env to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DjangoProject/.env" <<EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<EOF
           ${{ secrets.ENV_FILE }}
           EOF
 
