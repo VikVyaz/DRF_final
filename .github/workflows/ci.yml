@@ -86,16 +86,21 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
+      - name: Reset project dir on server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+          "rm -rf ~/DRF-final && mkdir -p ~/DRF-final"
+
       - name: Deploy .env to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DjangoProject/.env" <<EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<EOF
           ${{ secrets.ENV_FILE }}
           EOF
 
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd ~/DjangoProject
+            cd ~/DRF-final
             export TAG=${GITHUB_SHA}
             docker compose pull web
             docker compose up -d --no-deps --force-recreate web
