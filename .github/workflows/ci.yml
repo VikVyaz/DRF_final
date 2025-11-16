@@ -91,18 +91,22 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
           "mkdir -p ~/DRF-final"
 
+      - name: Sync project files to server
+        run: |
+          rsync -av --exclude '.git' --exclude '__pycache__' ./ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/DRF-final/
+
       - name: Copy .env to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cat > ~/DRF-final/.env" <<EOF
           ${{ secrets.ENV_FILE }}
           EOF
 
-      - name: Deploy to Server
+      - name: Deploy code & run migrations
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd ~/DRF-final
-            export TAG=${GITHUB_SHA}
-            docker compose pull web
-            docker compose up -d --no-deps --force-recreate web
-            docker compose exec web python manage.py migrate
-            EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+          "cd ~/DRF-final && \
+           export TAG=${GITHUB_SHA} && \
+           docker compose pull web && \
+           docker compose up -d --no-deps --force-recreate web && \
+           docker compose run --rm web python manage.py migrate"
