@@ -95,5 +95,11 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-          "cd ~/DRF-final && export TAG=${GITHUB_SHA} && sudo docker compose pull web && sudo docker compose up -d --no-deps --force-recreate web && sudo docker compose exec web python manage.py migrate"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd ~/DjangoProject
+            export TAG=${GITHUB_SHA}
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            sudo docker stop myapp || true
+            sudo docker rm myapp || true
+            sudo docker run -d --name myapp - 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          EOF
