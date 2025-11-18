@@ -91,7 +91,7 @@ else:
             "NAME": config("POSTGRES_DB"),
             "USER": config("POSTGRES_USER"),
             "PASSWORD": config("POSTGRES_PASSWORD"),
-            "HOST": config("DATABASE_HOST", default="localhost"),
+            "HOST": config("POSTGRES_HOST", default="localhost"),
             "PORT": config("PORT"),
         }
     }
@@ -151,7 +151,7 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "http://127.0.0.1:8000",
         "http://127.0.0.1:8000/swagger/",
-        f'{config('', default="http://localhost:8000")}'
+        f'http://{config('SERVER_PUB_IP', default="http://localhost:8000")}'
     ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
