@@ -97,8 +97,10 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop web 2>/dev/null || true
-            docker rm web 2>/dev/null || true
-            docker run -d --name web --env-file /home/test/DRF-final/.env ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
+            export TAG=${{ github.sha }}
+            cd ~/DRF-final
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d --force-recreate
           EOF
