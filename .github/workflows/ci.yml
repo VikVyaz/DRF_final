@@ -99,7 +99,7 @@ jobs:
           cd ~/DjangoProject
           export TAG=${GITHUB_SHA}
           sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          sudo docker stop web || true
-          sudo docker rm web || true
+          sudo docker stop web 2>/dev/null || true
+          sudo docker rm web 2>/dev/null || true
           sudo docker run -d --name web -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           EOF
