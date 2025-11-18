@@ -96,10 +96,11 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << EOF
-            cd ~/DjangoProject
-            export TAG=${GITHUB_SHA}
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${GITHUB_SHA}
+            cd ~/DRF-final
+            TAG=${GITHUB_SHA}
+            IMAGE=${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${GITHUB_SHA}
+            sudo docker pull $IMAGE
             sudo docker stop web 2>/dev/null || true
             sudo docker rm web 2>/dev/null || true
-            sudo docker run -d --name web -p 8000:8000 --env-file /home/test/DRF-final/.env ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            sudo docker run -d --name web --env-file /home/test/DRF-final/.env $IMAGE
           EOF
