@@ -117,6 +117,10 @@ jobs:
             docker stop web 2>/dev/null || true
             docker rm web 2>/dev/null || true
             
-            docker compose up -d --no-recreate web
-           
+            if ! docker ps -a --format '{{.Names}}' | grep -q '^db$'; then
+              docker compose up -d
+            else
+              docker compose up -d --no-deps --no-recreate web
+            fi
+          
           EOF
