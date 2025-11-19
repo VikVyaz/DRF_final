@@ -117,6 +117,6 @@ jobs:
             docker stop web 2>/dev/null || true
             docker rm web 2>/dev/null || true
             
-            docker compose up -d web
+            docker compose up -d --no-recreate web
            
           EOF
