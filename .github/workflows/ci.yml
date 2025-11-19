@@ -112,10 +112,13 @@ jobs:
             sed -i '/^DOCKER_HUB_USERNAME=/d' .env
             echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" >> .env
             
-            docker compose down --remove-orphans
+            docker stop $(docker ps -aq)
+            docker rm -f $(docker ps -aq)
             
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_final_web:${GITHUB_SHA}
-            
+          
             docker compose up -d
+          
+            docker image prune -af
           
           EOF
