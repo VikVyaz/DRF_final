@@ -67,7 +67,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
         with:
-          ref: feature/6_deploy
+          ref: feature/7-local-and-server-deploy
 
       - name: Log in to Docker Hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
