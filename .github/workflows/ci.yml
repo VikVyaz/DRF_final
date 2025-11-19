@@ -112,8 +112,8 @@ jobs:
             sed -i '/^DOCKER_HUB_USERNAME=/d' .env
             echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" >> .env
             
-            sudo docker stop $(docker ps -aq)
-            sudo docker rm -f $(docker ps -aq)
+            sudo docker ps -aq | xargs -r sudo docker stop
+            sudo docker ps -aq | xargs -r sudo docker rm -f
             
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_final_web:${GITHUB_SHA}
           
